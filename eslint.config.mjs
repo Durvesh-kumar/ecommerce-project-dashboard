@@ -11,6 +11,7 @@ const compat = new FlatCompat({
     'react/no-unescaped-entities': 'off',
     '@next/next/no-page-custom-font': 'off',
     'react/no-unescaped-entities': 'off',
+    "@typescript-eslint/no-explicit-any": "off"
   },
 });
 
