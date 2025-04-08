@@ -30,7 +30,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           prompt: "consent",
           access_type: "offline",
           response_type: "code",
-          redirect_uri: "http://localhost:3000/api/auth/callback/google",
         },
       },
     }),
