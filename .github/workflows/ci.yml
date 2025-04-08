@@ -7,7 +7,7 @@ on:
 
     pull_request:
         branches:
-            -main
+            - main
 
 jobs:
     build-and-test:
@@ -15,4 +15,65 @@ jobs:
         steps:
 
         - name: "Checkout repository"
-          uses: actions/checkout@v4
+          uses: actions/checkout@v4.2.2
+
+        - name: "Setup Node.js environment"
+          uses: actions/setup-node@v4.3.0
+          with:
+            node-version: '22.14.0'
+            cache: "npm"
+
+        - name: "Check node version"
+          run: |
+            echo "Running check node version...."
+            node --version
+
+        - name: "Install dependencies"
+          run: |
+            echo "Running install dependencies"
+            npm install
+            - name: Restore cache
+            uses: actions/cache@v4
+            with:
+              path: |
+                .next/cache
+
+        - name: Prisma Generate
+          run: |
+           echo "Running prisma generate...."
+           npx prisma generate
+     
+        - name: "Run lint"
+          run: npm run lint
+
+        - name: "Run test"
+          run: npm run test
+
+        - name: "Run build"
+          run: |
+             echo "Running build the project...."
+             npm run build
+
+        - name: "Save build artifacts"
+          uses: actions/upload-artifact@v4
+          with:
+            name: nextjs-build
+            include-hidden-files: true
+            path: ./out
+
+    deploy:
+
+     runs-on: ubuntu-latest
+     environment: production
+     steps:
+       - name: Download build artifact
+         uses: actions/download-artifact@v4.2.1
+         with:
+          name: nextjs-build
+
+       - name: Deploy to Vercel
+         env:
+           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+         run: |
+          npm install -g vercel
+          vercel deploy --prod
