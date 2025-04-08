@@ -16,7 +16,7 @@ export default async function page() {
 
     if(!data.users || data.users.length === 0){
         toast.error("No users found");
-        redirect("/");
+        window.location.replace("/")
     }
 
   return (
