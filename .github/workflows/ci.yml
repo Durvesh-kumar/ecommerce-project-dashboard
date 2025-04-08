@@ -33,13 +33,13 @@ jobs:
             echo "Running install dependencies"
             npm install
 
-        - name: Restore cache
-          uses: actions/cache@v4
-          with:
-            key:
-            path: |
-             echo "Running restore cache"
-             .next/cache
+        # - name: Restore cache
+        #   uses: actions/cache@v4
+        #   with:
+        #     key:
+        #     path: |
+        #      echo "Running restore cache"
+        #      .next/cache
 
         - name: Prisma Generate
           run: |
