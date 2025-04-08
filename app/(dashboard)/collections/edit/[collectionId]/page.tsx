@@ -1,6 +1,5 @@
 import {  buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import React from 'react'
 import toast from 'react-hot-toast';
 import { CollectionForm } from '../../components/CollectionForm';
@@ -9,20 +8,20 @@ import { auth } from '@/auth';
 export default async function page({params}:{params: Promise<{collectionId: string}>}) {
     const session = await auth();
     if(!session){
-        redirect("/collections");
+        window.location.replace("/collections");
     }
     const collectionId = (await params).collectionId
 
     if(!collectionId){
-        redirect("/collections");
+      window.location.replace("/collections");
     }
 
     if(session && (session.collectionId !== collectionId && session.role !== "OWNER")){
-      redirect("/collections");
+      window.location.replace("/collections");
     }
 
     if(session && (session.role === "USER")){
-      redirect("/collections");
+      window.location.replace("/collections");
     }
 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/collections/${collectionId}`,{
@@ -47,15 +46,15 @@ export default async function page({params}:{params: Promise<{collectionId: stri
     const data = await res.json();
     if(data.error || data.collection.length === 0){
         toast.error(data.message)
-        redirect("/collections")
+        window.location.replace("/collections")
     }
 
     if(!data.collection || data.collection.length === 0){
-        redirect("/collections")
+      window.location.replace("/collections")
     }
 
-    if(data.collection.id !== session.collectionId){
-      redirect("/collections")
+    if(data.collection.id !== session?.collectionId){
+      window.location.replace("/collections")
     }
 
 

@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { prisma } from "@/prisma";
-import { redirect } from "next/navigation";
 import React from "react";
 import ProductsTable from "../../products/components/ProductsTable";
 import Link from "next/link";
@@ -14,23 +13,23 @@ export default async function page() {
 
   // Redirect if the user is not logged in
   if (!session) {
-    redirect("/sign-in");
+    window.location.replace("/sign-in");
   }
 
   // Redirect if the user is a regular user (not authorized to view this page)
-  if (session && session.role === "USER") {
-    redirect("/collections");
+  if (session && (session.role === "USER")) {
+    window.location.replace("/collections");
   }
 
   // Redirect if the user does not have a collection
   if (session && !session.collectionId) {
-    redirect("/collections/create-collection");
+    window.location.replace("/collections/create-collection");
   }
 
   // Fetch products associated with the user's collection
   const products = await prisma.product.findMany({
     where: {
-      collectionId: session.collectionId,
+      collectionId: session && session.collectionId,
     },
     orderBy: {
       createdAt: "desc", // Sort products by creation date in descending order
@@ -47,7 +46,7 @@ export default async function page() {
 
   // Redirect if no products are found
   if (!products || products.length === 0) {
-    redirect("/products/create-product");
+    window.location.replace("/products/create-product");
   }
   
   return (

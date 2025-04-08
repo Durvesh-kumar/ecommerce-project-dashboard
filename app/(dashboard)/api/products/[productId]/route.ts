@@ -13,11 +13,19 @@ export const GET = async (req: NextRequest, { params }: { params: Promise<{ prod
         const findProduct = await prisma.product.findUnique({
             where: {
                 id: productId
+            },
+            include:{
+                collection:{
+                    select:{
+                        title: true,
+                        id: true
+                    }
+                }
             }
         })
 
         if(!findProduct){
-            return NextResponse.json({message: "Product not found", success: false, error: true}, {status: 404})
+            return NextResponse.json({message: "Product not found", product:findProduct, success: false, error: true}, {status: 404})
         }
 
         return NextResponse.json({message: "Product found", product:findProduct, success: true, error: false}, {status: 200})

@@ -1,6 +1,4 @@
 import { auth } from '@/auth';
-import { prisma } from '@/prisma';
-import { redirect } from 'next/navigation';
 import React from 'react'
 import toast from 'react-hot-toast';
 import ProductDetails from './components/ProductDetails';
@@ -11,25 +9,26 @@ export default async function page({params}: {params: Promise<{ productId: strin
 
     if(!productId){
         toast.error("ProductId is required");
-        redirect("/products")
+        window.location.replace("/products")
     }
 
     const session = await auth();
 
     if(!session){
-        redirect("/sign-in")
+        window.location.replace("/sign-in")
     }
 
-    const product = await prisma.product.findUnique({
-        where: {
-            id: productId
-        }
+    const res = await fetch(`/api/products/${productId}`,{
+        method: "GET",
+        cache: "no-store"
     });
 
-    if(!product){
+    const data = await res.json()
+
+    if(!data.product || data.product.length === 0){
         toast.error("Product is not found");
-        redirect("/products")
+        window.location.replace("/products")
     }
 
-  return <ProductDetails productData={product} session={session}/>
+  return <ProductDetails productData={data.product} session={session!}/>
 }

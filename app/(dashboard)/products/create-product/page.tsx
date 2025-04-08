@@ -1,20 +1,19 @@
 import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
 import React from 'react'
 import { ProductForm } from '../components/ProductForm'
 
 export default async function page() {
     const session = await auth()
     if(!session){
-        redirect("/sign-in")
+        window.location.replace("/sign-in")
     }
 
     if(session && (!session.collectionId)){
-        redirect("/collections/create-collection")
+        window.location.replace("/collections/create-collection")
     }
 
     if(session &&(session.role === "USER")){
-        redirect("/products")
+        window.location.replace("/products")
     }
     
   return <ProductForm />

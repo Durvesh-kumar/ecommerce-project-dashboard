@@ -1,5 +1,4 @@
 import { auth } from '@/auth'
-import { redirect } from 'next/navigation'
 import React from 'react'
 import { ProductForm } from '../../components/ProductForm';
 
@@ -9,19 +8,19 @@ export default async function page({params}:{params: Promise<{productId: string}
   const session = await auth();
 
   if(!productId){
-    redirect("/products")
+    window.location.replace("/products")
   }
 
   if(!session){
-    redirect("/sign-in")
+    window.location.replace("/sign-in")
   }
 
   if(session && (session.role === "USER")){
-    redirect("/products")
+    window.location.replace("/products")
   }
 
   if(session && (!session.collectionId)){
-    redirect("/collections/create-collection")
+    window.location.replace("/collections/create-collection")
   }
 
   const findProduct = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/products/${productId}`, {
@@ -33,17 +32,17 @@ export default async function page({params}:{params: Promise<{productId: string}
   });
 
   if(!findProduct.ok){
-    redirect("/products")
+    window.location.replace("/products")
   }
 
   const data = await findProduct.json()
 
   if(!data.product || data.product.length === 0){
-    redirect("/products")
+    window.location.replace("/products")
   }
 
-  if(data.product.collectionId !== session.collectionId){
-    redirect("/products")
+  if(data.product.collectionId !== session?.collectionId){
+    window.location.replace("/products")
   }
 
   return <ProductForm initialData={data.product}/>

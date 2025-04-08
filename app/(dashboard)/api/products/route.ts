@@ -103,6 +103,14 @@ export const GET = async()=>{
         const products = await prisma.product.findMany({
             orderBy: {
                 createdAt: "desc"
+            },
+            include:{
+                collection:{
+                    select:{
+                        title: true,
+                        id: true
+                    }
+                }
             }
         })
 
