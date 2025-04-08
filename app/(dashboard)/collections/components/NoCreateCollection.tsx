@@ -2,22 +2,21 @@ import { auth } from '@/auth'
 import { buttonVariants } from '@/components/ui/button'
 import { Store } from 'lucide-react'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import React from 'react'
 
 export default async function NoCreateCollection() {
   const session = await auth();
 
   if(!session){
-    redirect("/sign-in");
+    window.location.replace("/sign-in");
   }
 
   if(session && (session.role === "USER")){
-    redirect("/collections");
+    window.location.replace("/collections");
   }
 
   if(session && (session.collectionId)){
-    redirect("/collections");
+    window.location.replace("/collections");
   }
   return(
     <div className='flex items-center justify-center w-full *:h-screen text-xl'>

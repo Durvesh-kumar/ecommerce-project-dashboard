@@ -1,6 +1,4 @@
 import { auth } from "@/auth";
-import { prisma } from "@/prisma";
-import { redirect } from "next/navigation";
 import React from "react";
 import ProductsTable from "../../products/components/ProductsTable";
 import Link from "next/link";
