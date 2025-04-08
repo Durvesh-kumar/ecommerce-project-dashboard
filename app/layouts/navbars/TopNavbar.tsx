@@ -93,7 +93,7 @@ export default function TopNavbar() {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger className="rounded-full outline-none">
-                  <div>
+                  <div className="flex items-center justify-center">
                     {session?.user?.image ? (
                       <Image
                         src={session?.user?.image}

@@ -25,10 +25,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       clientId: `${process.env.GOOGLE_AUTH_ID}`,
       clientSecret: `${process.env.GOOGLE_AUTH_SECRET}`,
       authorization: {
+        url: "https://accounts.google.com/o/oauth2/v2/auth",
         prisma: {
           prompt: "consent",
           access_type: "offline",
           response_type: "code",
+          redirect_uri: "http://localhost:3000/api/auth/callback/google",
         },
       },
     }),
