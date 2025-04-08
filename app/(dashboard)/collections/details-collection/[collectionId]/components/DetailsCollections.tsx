@@ -13,6 +13,18 @@ export default async function DetailsCollections({
   const session = await auth();
   return (
     <div className="flex flex-col m-2">
+      <div className="my-4 flex items-center justify-end">
+        {session && session.role === "OWNER" && (
+          <Link
+            href={`/collections/owner-collection-products/${collection.id}`}
+            className={`${buttonVariants({
+              variant: "default",
+            })} bg-blue-600 text-white hover:bg-slate-400`}
+          >
+            Show products
+          </Link>
+        )}
+      </div>
       <div className="text-center text-4xl my-5 font-bold">
         {collection.title}
       </div>
@@ -60,14 +72,14 @@ export default async function DetailsCollections({
               <p>{collection.country}</p>
             </div>
 
-            {
-                session && (session.collectionId === collection.id || session.role === "OWNER") && (
-                    <div className="flex gap-3">
-                <h1 className="text-lg font-bold">Totle products:</h1>
-                <p>{collection.products?.length || 0}</p>
-              </div>
-                )
-            }
+            {session &&
+              (session.collectionId === collection.id ||
+                session.role === "OWNER") && (
+                <div className="flex gap-3">
+                  <h1 className="text-lg font-bold">Totle products:</h1>
+                  <p>{collection.products?.length || 0}</p>
+                </div>
+              )}
           </div>
         </div>
 

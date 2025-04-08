@@ -1,15 +1,20 @@
 import { auth } from "@/auth";
-import { prisma } from "@/prisma";
-import { redirect } from "next/navigation";
 import React from "react";
-import ProductsTable from "../../products/components/ProductsTable";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import { DataTable } from "@/components/coustemUi/DataTable";
 import toast from "react-hot-toast";
+import ProductsTable from "@/app/(dashboard)/products/components/ProductsTable";
 
-export default async function page() {
+export default async function page({params}:{params: Promise<{CollectionId: string}>}) {
+
+    const collectionId = (await params).CollectionId
+
+    if(!collectionId){
+        toast.success("Collection not found")
+        window.location.replace("/collections");
+    }
   // Authenticate the user
   const session = await auth();
 
@@ -19,16 +24,11 @@ export default async function page() {
   }
 
   // Redirect if the user is a regular user (not authorized to view this page)
-  if (session && session.role === "USER") {
+  if (session && session.role !== "OWNER") {
     window.location.replace("/collections");
   }
 
-  const collectionId = session && session.collectionId
-
   // Redirect if the user does not have a collection
-  if (!collectionId) {
-    window.location.replace("/collections/create-collection");
-  }
 
   // Fetch products associated with the user's collection
   const res = await fetch(`/api/collections/products/${collectionId}`, {

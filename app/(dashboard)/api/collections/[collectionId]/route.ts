@@ -10,7 +10,7 @@ export const GET = async(req:NextRequest, {params}:{params: Promise<{collectionI
         const collection = await prisma.collection.findUnique({
             where:{
                 id: collectionId
-            }
+            },
         });
 
         if(!collection){
