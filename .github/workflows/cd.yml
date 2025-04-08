@@ -1,0 +1,28 @@
+name: "Continous Delavery project"
+
+on:
+    workflow_run:
+        workflows: ["dashboard-project"]
+        types:
+            - completed
+    workflow_dispatch:
+
+jobs:
+    deploy:
+
+     runs-on: ubuntu-latest
+     environment: production
+     steps:
+       - name: Download build artifact
+         uses: actions/download-artifact@v4.2.1
+         with:
+          name: nextjs-build
+
+       - name: Deploy to Vercel
+         env:
+           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+         run: |
+          npm install -g vercel
+          vercel deploy --prod
+
+    

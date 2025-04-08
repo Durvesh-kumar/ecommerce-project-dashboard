@@ -33,13 +33,16 @@ jobs:
             echo "Running install dependencies"
             npm install
 
-        # - name: Restore cache
-        #   uses: actions/cache@v4
-        #   with:
-        #     key:
-        #     path: |
-        #      echo "Running restore cache"
-        #      .next/cache
+        - name: Restore cache
+          uses: actions/cache@v4.2.3
+          with:
+              path: |
+                .next/cache
+              # Generate a new cache whenever packages or source files change.
+              key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+              # If source files changed but packages didn't, rebuild from a prior cache.
+              restore-keys: |
+                ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
 
         - name: Prisma Generate
           run: |
@@ -63,20 +66,3 @@ jobs:
             name: nextjs-build
             include-hidden-files: true
             path: ./out
-
-    deploy:
-
-     runs-on: ubuntu-latest
-     environment: production
-     steps:
-       - name: Download build artifact
-         uses: actions/download-artifact@v4.2.1
-         with:
-          name: nextjs-build
-
-       - name: Deploy to Vercel
-         env:
-           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-         run: |
-          npm install -g vercel
-          vercel deploy --prod
