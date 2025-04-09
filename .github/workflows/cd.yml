@@ -13,12 +13,10 @@ jobs:
      runs-on: ubuntu-latest
      environment: production
      steps:
-        
+
        - name: "Setup Node.js environment"
          uses: actions/setup-node@v4.3.0
-         with:
-            node-version: '22.14.0'
-            cache: 'npm'
+       
 
        - name: Download build artifact
          uses: actions/download-artifact@v4.2.1
