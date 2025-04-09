@@ -76,5 +76,4 @@ jobs:
           with:
             name: nextjs-build
             include-hidden-files: true
-            path: .next/
-            retention-days: 30
+            path: .next
