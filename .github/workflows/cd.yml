@@ -16,6 +16,9 @@ jobs:
 
        - name: "Setup Node.js environment"
          uses: actions/setup-node@v4.3.0
+
+       - name: "Setup vercel CLI"
+         run: npm install -g vercel
        
 
        - name: Download build artifact
