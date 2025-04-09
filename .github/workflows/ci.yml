@@ -39,8 +39,8 @@ jobs:
               path: .next/cache
               key: Linux-nextjs-${{ hashFiles('**/package-lock.json') }}
               restore-keys: |
-               Linux-nextjs-
-               save-always: true
+                Linux-nextjs-
+              save-always: true
  
         - name: Prisma Generate
           run: |
@@ -62,5 +62,4 @@ jobs:
           uses: actions/upload-artifact@v4
           with:
             name: nextjs-build
-            include-hidden-files: true
             path: ./out
