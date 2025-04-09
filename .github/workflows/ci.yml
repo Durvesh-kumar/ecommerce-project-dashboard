@@ -33,14 +33,14 @@ jobs:
             echo "Running install dependencies"
             npm install
 
-        - name: Restore cache
-          uses: actions/cache@v4.2.3
+        - name: Cache dependencies
+          id: cache
+          uses: actions/cache/restore@v4
           with:
               path: .next/cache
               key: Linux-nextjs-${{ hashFiles('**/package-lock.json') }}
               restore-keys: |
                 Linux-nextjs-
-              save-always: true
  
         - name: Prisma Generate
           run: |
@@ -57,6 +57,16 @@ jobs:
           run: |
              echo "Running build the project...."
              npm run build
+
+        - name: Export Next.js app
+          run: npm run export
+
+        - name: Save cache
+          if: steps.cache.outputs.cache-hit != 'true'
+          uses: actions/cache/save@v4
+          with:
+               path: .next/cache
+               key: Linux-nextjs-${{ hashFiles('**/package-lock.json') }}
 
         - name: "Save build artifacts"
           uses: actions/upload-artifact@v4
